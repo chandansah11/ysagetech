@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ysage Tech — Future-Forward Technology Solutions</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #060a10;
+      --surface: #0d1520;
+      --surface2: #111d2e;
+      --border: rgba(255,255,255,0.07);
+      --accent: #00e5ff;
+      --accent2: #7b61ff;
+      --text: #e8f0fe;
+      --muted: #7a8fa8;
+      --white: #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 6%;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(6,10,16,0.75);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .nav-logo span { color: var(--accent); }
+
+    .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.88rem; font-weight: 400;
+      color: var(--muted); text-decoration: none;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem; font-weight: 500;
+      padding: 0.55rem 1.4rem;
+      background: var(--accent);
+      color: #000;
+      border: none; border-radius: 100px;
+      cursor: pointer; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 20px rgba(0,229,255,0.4);
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 8rem 6% 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* animated mesh background */
+    .mesh {
+      position: absolute; inset: -40%;
+      background:
+        radial-gradient(ellipse 60% 50% at 20% 40%, rgba(0,229,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 80% 60%, rgba(123,97,255,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 50% 10%, rgba(0,229,255,0.06) 0%, transparent 60%);
+      animation: meshFloat 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    @keyframes meshFloat {
+      0%   { transform: translate(0,0) scale(1); }
+      100% { transform: translate(2%,3%) scale(1.04); }
+    }
+
+    .grid-overlay {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-inner { position: relative; z-index: 1; max-width: 860px; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid rgba(0,229,255,0.3);
+      background: rgba(0,229,255,0.07);
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      font-size: 0.78rem; font-weight: 500;
+      color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.6s ease both;
+    }
+    .badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: 0.4; transform: scale(1.5); }
+    }
+
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      margin-bottom: 1.6rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+    h1 .accent { color: var(--accent); }
+    h1 .accent2 { color: var(--accent2); }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto 3rem;
+      line-height: 1.7;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    .btn-primary {
+      padding: 0.85rem 2.2rem;
+      background: var(--accent);
+      color: #000; font-weight: 600;
+      border-radius: 100px; text-decoration: none;
+      font-size: 0.95rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0,229,255,0.45);
+    }
+
+    .btn-ghost {
+      padding: 0.85rem 2.2rem;
+      border: 1px solid var(--border);
+      color: var(--text); font-weight: 400;
+      border-radius: 100px; text-decoration: none;
+      font-size: 0.95rem;
+      background: transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-ghost:hover {
+      border-color: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.04);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 6%;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 0;
+    }
+    .stat {
+      flex: 1; min-width: 140px; max-width: 220px;
+      text-align: center; padding: 0.5rem 1.5rem;
+      position: relative;
+    }
+    .stat:not(:last-child)::after {
+      content: '';
+      position: absolute; right: 0; top: 20%; bottom: 20%;
+      width: 1px; background: var(--border);
+    }
+    .stat-number {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem; font-weight: 800;
+      color: var(--accent);
+    }
+    .stat-label {
+      font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem;
+      text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* ─── SECTIONS ─── */
+    section { padding: 7rem 6%; }
+
+    .section-tag {
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--accent); letter-spacing: 0.12em;
+      text-transform: uppercase; margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.1;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-desc {
+      color: var(--muted); font-size: 1.05rem;
+      line-height: 1.75; max-width: 520px;
+    }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--surface); }
+    .services-header { margin-bottom: 4rem; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .service-card {
+      background: var(--surface2);
+      padding: 2.5rem;
+      transition: background 0.3s;
+      cursor: default;
+    }
+    .service-card:hover { background: #152035; }
+
+    .service-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: rgba(0,229,255,0.08);
+      border: 1px solid rgba(0,229,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 1.5rem;
+    }
+
+    .service-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.15rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.75rem;
+    }
+    .service-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
+
+    /* ─── ABOUT ─── */
+    #about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem; align-items: center;
+    }
+
+    .about-visual {
+      position: relative; height: 460px;
+    }
+
+    .about-card {
+      position: absolute;
+      border-radius: 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 2rem;
+    }
+    .about-card-main {
+      inset: 0 10% 10% 0;
+      background: linear-gradient(135deg, #0d1b2e, #0a1520);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden;
+    }
+    .about-card-main::before {
+      content: '';
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.15), transparent 70%);
+    }
+    .about-card-small {
+      bottom: 0; right: 0;
+      width: 55%; background: var(--surface2);
+      text-align: center;
+    }
+    .about-card-small .big { 
+      font-family: 'Syne', sans-serif;
+      font-size: 2.5rem; font-weight: 800; color: var(--accent);
+    }
+    .about-card-small .lbl { font-size: 0.82rem; color: var(--muted); }
+
+    .terminal {
+      font-family: 'Courier New', monospace;
+      font-size: 0.8rem;
+      position: relative; z-index: 1;
+    }
+    .terminal-bar {
+      display: flex; gap: 6px; margin-bottom: 1rem;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot.r { background: #ff5f57; }
+    .dot.y { background: #febc2e; }
+    .dot.g { background: #28c840; }
+    .t-line { margin: 0.2rem 0; color: #7a8fa8; }
+    .t-line .kw { color: #00e5ff; }
+    .t-line .str { color: #7b61ff; }
+    .t-line .val { color: #b5e853; }
+
+    /* ─── PROCESS ─── */
+    #process { background: var(--surface); }
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem; margin-top: 4rem;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 28px; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+    }
+    .step { text-align: center; padding: 0 1rem; }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Syne', sans-serif; font-weight: 800;
+      font-size: 1.1rem; color: var(--accent);
+      margin: 0 auto 1.5rem;
+      position: relative; z-index: 1;
+    }
+    .step h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      color: var(--white); margin-bottom: 0.5rem;
+    }
+    .step p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      text-align: center;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+    }
+    #contact::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.07), transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .contact-inner { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+    .contact-inner .section-desc { max-width: 100%; margin: 0 auto 2.5rem; }
+
+    .contact-form {
+      display: flex; flex-direction: column; gap: 1rem;
+      text-align: left;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-field { display: flex; flex-direction: column; gap: 0.4rem; }
+    label { font-size: 0.8rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    input, textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1.2rem;
+      color: var(--text); font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+      outline: none; resize: none;
+    }
+    input:focus, textarea:focus {
+      border-color: rgba(0,229,255,0.4);
+    }
+    .submit-btn {
+      padding: 1rem;
+      background: var(--accent);
+      color: #000; font-weight: 600;
+      border-radius: 10px; border: none;
+      font-size: 1rem; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .submit-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 25px rgba(0,229,255,0.4);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 3rem 6%;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800; font-size: 1.2rem;
+      color: var(--white);
+    }
+    .footer-logo span { color: var(--accent); }
+    .footer-links { display: flex; gap: 1.8rem; list-style: none; }
+    .footer-links a { font-size: 0.85rem; color: var(--muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--white); }
+    .footer-copy { font-size: 0.8rem; color: var(--muted); }
+
+    /* ─── HAMBURGER (mobile) ─── */
+    .hamburger { display: none; background: none; border: none; cursor: pointer; }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--text); margin: 4px 0;
+      border-radius: 2px;
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      #about { grid-template-columns: 1fr; }
+      .about-visual { height: 300px; margin-bottom: 2rem; }
+      .process-steps::before { display: none; }
+    }
+    @media (max-width: 700px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: block; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; }
+      .stat:not(:last-child)::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ──────────────── NAV ──────────────── -->
+<nav>
+  <a class="nav-logo" href="#hero">Ysage<span>Tech</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#contact">Get in Touch</a>
+  <button class="hamburger" onclick="toggleMenu(this)" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ──────────────── HERO ──────────────── -->
+<section id="hero">
+  <div class="mesh"></div>
+  <div class="grid-overlay"></div>
+  <div class="hero-inner">
+    <div class="badge"><span class="badge-dot"></span> Innovative Technology Solutions</div>
+    <h1>
+      Building the<br/>
+      <span class="accent">Future</span> of <span class="accent2">Tech</span>
+    </h1>
+    <p class="hero-sub">
+      Ysage Tech delivers cutting-edge software, digital transformation, and technology consulting services that help businesses grow faster and smarter.
+    </p>
+    <div class="hero-actions">
+      <a href="#services" class="btn-primary">Explore Services</a>
+      <a href="#contact" class="btn-ghost">Let's Talk →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── STATS ──────────────── -->
+<div class="stats-bar reveal">
+  <div class="stat"><div class="stat-number">150+</div><div class="stat-label">Projects Delivered</div></div>
+  <div class="stat"><div class="stat-number">98%</div><div class="stat-label">Client Satisfaction</div></div>
+  <div class="stat"><div class="stat-number">40+</div><div class="stat-label">Tech Experts</div></div>
+  <div class="stat"><div class="stat-number">6+</div><div class="stat-label">Years of Innovation</div></div>
+</div>
+
+<!-- ──────────────── SERVICES ──────────────── -->
+<section id="services">
+  <div class="services-header reveal">
+    <div class="section-tag">What We Do</div>
+    <h2 class="section-title">End-to-End<br/>Tech Services</h2>
+    <p class="section-desc">From strategy to execution — we cover every layer of your technology needs.</p>
+  </div>
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <div class="service-icon">⚙️</div>
+      <h3>Software Development</h3>
+      <p>Custom web and mobile applications built with modern tech stacks, scalable architecture, and pixel-perfect UX.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">☁️</div>
+      <h3>Cloud & Infrastructure</h3>
+      <p>Seamless cloud migration, DevOps automation, and infrastructure management for high-availability systems.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤖</div>
+      <h3>AI & Automation</h3>
+      <p>Intelligent automation and AI integrations that reduce manual work, optimize workflows, and unlock insights.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔒</div>
+      <h3>Cybersecurity</h3>
+      <p>Comprehensive security audits, penetration testing, and protection strategies to keep your data safe.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <h3>Data & Analytics</h3>
+      <p>Turn raw data into strategic advantage through dashboards, data pipelines, and predictive analytics.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧭</div>
+      <h3>Tech Consulting</h3>
+      <p>Strategic roadmaps, technology assessments, and architecture consulting that align IT with business goals.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── ABOUT ──────────────── -->
+<section id="about">
+  <div class="about-visual reveal">
+    <div class="about-card about-card-main">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        </div>
+        <div class="t-line"><span class="kw">const</span> ysage = {</div>
+        <div class="t-line">&nbsp;&nbsp;mission: <span class="str">"Empower through tech"</span>,</div>
+        <div class="t-line">&nbsp;&nbsp;approach: <span class="str">"Human-centered"</span>,</div>
+        <div class="t-line">&nbsp;&nbsp;delivery: <span class="val">true</span>,</div>
+        <div class="t-line">&nbsp;&nbsp;innovation: <span class="val">∞</span></div>
+        <div class="t-line">};</div>
+        <div class="t-line" style="margin-top:0.8rem; color:#28c840;">▶ Building tomorrow's solutions today.</div>
+      </div>
+    </div>
+    <div class="about-card about-card-small">
+      <div class="big">100%</div>
+      <div class="lbl">Remote-Ready &amp; Agile</div>
+    </div>
+  </div>
+  <div class="about-content reveal">
+    <div class="section-tag">Our Story</div>
+    <h2 class="section-title">Technology That<br/>Actually Works</h2>
+    <p class="section-desc">
+      At Ysage Tech, we believe technology should solve real problems. We partner with startups, scale-ups, and enterprises to build software products and infrastructure that perform — reliably, securely, and at scale.
+    </p>
+    <br/>
+    <p class="section-desc">
+      Our team of engineers, designers, and strategists works in close collaboration with clients, moving fast without breaking things. We're not just a vendor — we're a long-term technology partner.
+    </p>
+    <br/>
+    <a href="#contact" class="btn-primary" style="display:inline-block; margin-top:1rem;">Work With Us</a>
+  </div>
+</section>
+
+<!-- ──────────────── PROCESS ──────────────── -->
+<section id="process">
+  <div class="reveal" style="text-align:center; max-width: 600px; margin: 0 auto 1rem;">
+    <div class="section-tag">How We Work</div>
+    <h2 class="section-title">Our Proven Process</h2>
+    <p class="section-desc" style="max-width:100%; margin:0 auto;">A clear, collaborative workflow from discovery to launch — and beyond.</p>
+  </div>
+  <div class="process-steps reveal">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h4>Discovery</h4>
+      <p>We learn your goals, pain points, and technical landscape deeply before proposing anything.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h4>Strategy</h4>
+      <p>We map a clear roadmap — technology stack, timelines, milestones, and success metrics.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h4>Build</h4>
+      <p>Agile sprints, continuous delivery, and constant communication keep you in control.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h4>Launch</h4>
+      <p>Rigorous QA, seamless deployment, and post-launch monitoring ensure a smooth go-live.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">05</div>
+      <h4>Grow</h4>
+      <p>Ongoing support, feature expansion, and optimization to keep your product ahead.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────── CONTACT ──────────────── -->
+<section id="contact">
+  <div class="contact-inner reveal">
+    <div class="section-tag">Get In Touch</div>
+    <h2 class="section-title">Let's Build<br/>Something Great</h2>
+    <p class="section-desc">Tell us about your project. We'll get back to you within 24 hours.</p>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-field">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Your full name" required />
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@company.com" required />
+        </div>
+      </div>
+      <div class="form-field">
+        <label for="subject">Subject</label>
+        <input type="text" id="subject" placeholder="What's this about?" />
+      </div>
+      <div class="form-field">
+        <label for="message">Message</label>
+        <textarea id="message" rows="5" placeholder="Tell us about your project, goals, or questions..." required></textarea>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- ──────────────── FOOTER ──────────────── -->
+<footer>
+  <div class="footer-logo">Ysage<span>Tech</span></div>
+  <ul class="footer-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="https://www.linkedin.com/in/ysage-tech-382153373/" target="_blank">LinkedIn</a></li>
+  </ul>
+  <div class="footer-copy">© 2026 Ysage Tech. All rights reserved.</div>
+</footer>
+
+<script>
+  // ── Scroll Reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => io.observe(el));
+
+  // ── Counter Animation
+  function animateCount(el, target, suffix='') {
+    let start = 0; const dur = 1600;
+    const step = (timestamp) => {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / dur, 1);
+      const ease = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.floor(ease * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const statsEl = document.querySelector('.stats-bar');
+  const statsIO = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      animateCount(document.querySelectorAll('.stat-number')[0], 150, '+');
+      animateCount(document.querySelectorAll('.stat-number')[1], 98, '%');
+      animateCount(document.querySelectorAll('.stat-number')[2], 40, '+');
+      animateCount(document.querySelectorAll('.stat-number')[3], 6, '+');
+      statsIO.unobserve(statsEl);
+    }
+  }, { threshold: 0.5 });
+  statsIO.observe(statsEl);
+
+  // ── Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = '#28c840';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; e.target.reset(); }, 3000);
+  }
+
+  // ── Mobile nav toggle
+  function toggleMenu(btn) {
+    const links = document.querySelector('.nav-links');
+    const cta   = document.querySelector('.nav-cta');
+    const open  = links.style.display === 'flex';
+    links.style.cssText = open ? '' : 'display:flex; position:fixed; top:64px; left:0; right:0; flex-direction:column; background:#0d1520; padding:2rem; gap:1.5rem; border-bottom:1px solid rgba(255,255,255,0.07)';
+    cta.style.display = open ? 'none' : 'block';
+  }
+</script>
+</body>
+</html>
