@@ -11,6 +11,10 @@
     href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet" />
   <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+
+  <!-- EmailJS SDK — sends form directly to Gmail, no backend needed -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <style>
     *,
     *::before,
@@ -153,10 +157,7 @@
       position: absolute;
       inset: -30%;
       pointer-events: none;
-      background:
-        radial-gradient(ellipse 55% 45% at 15% 50%, rgba(10, 240, 193, 0.1) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 55% at 85% 50%, rgba(26, 140, 255, 0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 35% 35% at 50% 5%, rgba(240, 165, 10, 0.06) 0%, transparent 60%);
+      background: radial-gradient(ellipse 55% 45% at 15% 50%, rgba(10, 240, 193, 0.1) 0%, transparent 60%), radial-gradient(ellipse 50% 55% at 85% 50%, rgba(26, 140, 255, 0.08) 0%, transparent 60%), radial-gradient(ellipse 35% 35% at 50% 5%, rgba(240, 165, 10, 0.06) 0%, transparent 60%);
       animation: bgDrift 14s ease-in-out infinite alternate;
     }
 
@@ -399,24 +400,6 @@
       border-color: rgba(10, 240, 193, .25);
     }
 
-    /* ════════════════════════════════════════
-       PROJECT PREVIEW IMAGE AREA
-       ────────────────────────────────────────
-       HOW TO REPLACE WITH REAL SCREENSHOT:
-
-       1. Save your screenshot as "akerix-preview.png"
-          in the SAME folder as index.html
-
-       2. Inside .project-preview, DELETE the entire
-          <div class="ph-wrap">...</div> block
-
-       3. ADD this in its place:
-          <img src="akerix-preview.png"
-               alt="Akerix Learning Platform Preview"
-               style="width:100%;height:100%;
-                      object-fit:cover;
-                      object-position:top center;" />
-       ════════════════════════════════════════ */
     .project-preview {
       position: relative;
       min-height: 400px;
@@ -492,7 +475,6 @@
       border-radius: 100px;
     }
 
-    /* decorative pulse rings on placeholder */
     .ph-ring {
       position: absolute;
       border-radius: 50%;
@@ -503,19 +485,19 @@
     .ph-ring:nth-child(1) {
       width: 120px;
       height: 120px;
-      animation-delay: 0s;
+      animation-delay: 0s
     }
 
     .ph-ring:nth-child(2) {
       width: 200px;
       height: 200px;
-      animation-delay: .6s;
+      animation-delay: .6s
     }
 
     .ph-ring:nth-child(3) {
       width: 300px;
       height: 300px;
-      animation-delay: 1.2s;
+      animation-delay: 1.2s
     }
 
     @keyframes ringPulse {
@@ -833,22 +815,6 @@
       border-color: rgba(10, 240, 193, .2);
     }
 
-    /* ════════════════════════════════════════
-       TEAM PHOTO PLACEHOLDERS
-       ────────────────────────────────────────
-       To add real photos for each person:
-
-       Replace <div class="avatar">👤</div> with:
-
-       <div class="avatar">
-         <img src="yuvraj.jpg" alt="Yuvraj Haran"
-              style="width:100%;height:100%;
-                     object-fit:cover;border-radius:50%;" />
-       </div>
-
-       Use: yuvraj.jpg / shreyas.jpg / chandan.jpg
-       Place images in same folder as index.html
-       ════════════════════════════════════════ */
     .avatar {
       width: 90px;
       height: 90px;
@@ -866,14 +832,6 @@
 
     .team-card.ceo .avatar {
       border-color: rgba(10, 240, 193, .5);
-    }
-
-    .t-name {
-      font-family: 'Clash Display', 'Bricolage Grotesque', sans-serif;
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--white);
-      margin-bottom: .3rem;
     }
 
     .t-role {
@@ -989,6 +947,7 @@
       border-color: rgba(10, 240, 193, .4);
     }
 
+    /* SEND BUTTON STATES */
     .sbtn {
       padding: .95rem;
       background: var(--accent);
@@ -999,12 +958,128 @@
       border-radius: 10px;
       cursor: pointer;
       font-family: 'Bricolage Grotesque', sans-serif;
-      transition: transform .2s, box-shadow .2s;
+      transition: transform .2s, box-shadow .2s, background .3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: .6rem;
+      position: relative;
+      overflow: hidden;
     }
 
-    .sbtn:hover {
+    .sbtn:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 0 24px rgba(10, 240, 193, .4);
+    }
+
+    .sbtn:disabled {
+      cursor: not-allowed;
+      opacity: .8;
+      transform: none !important;
+    }
+
+    .sbtn.loading {
+      background: #0c2e28;
+      color: var(--accent);
+      border: 1px solid rgba(10, 240, 193, .3);
+    }
+
+    .sbtn.success {
+      background: #0d3320;
+      color: #28c840;
+      border: 1px solid rgba(40, 200, 64, .3);
+    }
+
+    .sbtn.error {
+      background: #2e0d0d;
+      color: #ff5c5c;
+      border: 1px solid rgba(255, 92, 92, .3);
+    }
+
+    /* spinner */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(10, 240, 193, .3);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      font-size: .9rem;
+      font-weight: 500;
+      color: var(--text);
+      z-index: 9999;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+      transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), opacity .4s;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast.toast-success {
+      border-color: rgba(40, 200, 64, .3);
+    }
+
+    .toast.toast-error {
+      border-color: rgba(255, 92, 92, .3);
+    }
+
+    .toast-icon {
+      font-size: 1.2rem;
+    }
+
+    /* EMAILJS SETUP BANNER — remove after you configure EmailJS */
+    .setup-notice {
+      background: rgba(240, 165, 10, .08);
+      border: 1px solid rgba(240, 165, 10, .25);
+      border-radius: 12px;
+      padding: 1rem 1.4rem;
+      margin-bottom: 1.5rem;
+      font-size: .82rem;
+      color: var(--gold);
+      line-height: 1.7;
+      text-align: left;
+    }
+
+    .setup-notice strong {
+      color: var(--accent2, #f0a50a);
+      display: block;
+      margin-bottom: .3rem;
+    }
+
+    .setup-notice code {
+      background: rgba(10, 240, 193, .08);
+      padding: .1rem .4rem;
+      border-radius: 4px;
+      font-family: 'DM Mono', monospace;
+      font-size: .78rem;
+      color: var(--accent);
     }
 
     /* FOOTER */
@@ -1110,6 +1185,12 @@
       .stat-i:not(:last-child)::after {
         display: none;
       }
+
+      .toast {
+        width: 90%;
+        white-space: normal;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -1176,45 +1257,28 @@
       <p class="sec-desc">We build products that solve real problems. Here's our flagship project — with more exciting
         work on the way.</p>
     </div>
-
     <div class="project-card reveal">
-
-      <!-- ════════════════════════════════════════════════════════
-         PROJECT PREVIEW IMAGE — AKERIX LEARNING
-         ──────────────────────────────────────────────────────
-         STEP 1: Save your website screenshot as:
-                 akerix-preview.png
-                 (in the same folder as index.html)
-
-         STEP 2: Delete the <div class="ph-wrap"> block below
-                 (everything from <div class="ph-wrap"> to
-                 its closing </div>)
-
-         STEP 3: Paste this in its place:
-                 <img src="akerix-preview.png"
-                      alt="Akerix Learning Platform Preview"
-                      style="width:100%;height:100%;
-                             object-fit:cover;
-                             object-position:top center;" />
-         ════════════════════════════════════════════════════ -->
       <div class="project-preview">
         <div class="ph-ring"></div>
         <div class="ph-ring"></div>
         <div class="ph-ring"></div>
-        <img src="akerix-preview.png" alt="Akerix Learning Platform Preview" style="width:100%;height:100%;
-             object-fit:cover;
-             object-position:top center;" />
-
+        <!--
+          ── REPLACE WITH REAL IMAGE ──────────────────────────────
+          Delete the ph-wrap block below and replace with:
+          <img src="akerix-preview.png"
+               alt="Akerix Learning Platform Preview"
+               style="width:100%;height:100%;object-fit:cover;object-position:top center;" />
+          ─────────────────────────────────────────────────────── -->
+        <img src="akerix-preview.png" alt="Akerix Learning Platform Preview"
+          style="width:100%;height:100%;object-fit:cover;object-position:top center;" />
       </div>
-
       <div class="project-info">
         <div class="proj-badge">⭐ Flagship Project</div>
         <div class="proj-name">Akerix <span>Learning</span></div>
-        <p class="proj-desc">
-          Akerix Learning is our premier e-learning platform designed to make quality education truly accessible. Users
-          can browse a wide catalogue of courses, enroll with a single click, track their learning progress, and grow
-          their skills — all within a clean, intuitive interface built for modern learners of every level.
-        </p>
+        <p class="proj-desc">Akerix Learning is our premier e-learning platform designed to make quality education truly
+          accessible. Users can browse a wide catalogue of courses, enroll with a single click, track their learning
+          progress, and grow their skills — all within a clean, intuitive interface built for modern learners of every
+          level.</p>
         <div class="proj-tags">
           <span class="tag hi">E-Learning</span>
           <span class="tag hi">Django</span>
@@ -1225,7 +1289,6 @@
         <a href="#contact" class="proj-link">Learn More <span>→</span></a>
       </div>
     </div>
-
     <div class="more-box reveal">
       <p><strong>More projects are in development.</strong> Several exciting products are being built across different
         domains — details will be revealed at the right time.</p>
@@ -1320,61 +1383,51 @@
         one.</p>
     </div>
     <div class="team-grid reveal">
-
-      <!-- CEO & FOUNDER -->
       <div class="team-card ceo">
         <!--
-        ── PHOTO: YUVRAJ HARAN ──────────────────
-        Replace <div class="avatar">👤</div> with:
-        <div class="avatar">
-          <img src="yuvraj.jpg" alt="Yuvraj Haran"
-               style="width:100%;height:100%;
-                      object-fit:cover;border-radius:50%;" />
-        </div>
-        ─────────────────────────────────────── -->
+          ── PHOTO: YUVRAJ HARAN ─────────────────────
+          Replace <div class="avatar">👤</div> with:
+          <div class="avatar">
+            <img src="yuvraj.jpg" alt="Yuvraj Haran"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+          </div>
+          ─────────────────────────────────────────── -->
         <div class="avatar">👤</div>
         <div class="t-name">Yuvraj Haran</div>
         <div class="t-role">CEO &amp; Founder</div>
         <p class="t-desc">Visionary leader and founder of Ycsage Tech. Drives the company's strategy, product direction,
           and long-term growth with a bold focus on impactful technology.</p>
       </div>
-
-      <!-- DIRECTOR 1 -->
       <div class="team-card">
         <!--
-        ── PHOTO: SHREYAS KAWALE ────────────────
-        Replace <div class="avatar">👤</div> with:
-        <div class="avatar">
-          <img src="shreyas.jpg" alt="Shreyas Kawale"
-               style="width:100%;height:100%;
-                      object-fit:cover;border-radius:50%;" />
-        </div>
-        ─────────────────────────────────────── -->
+          ── PHOTO: SHREYAS KAWALE ───────────────────
+          Replace <div class="avatar">👤</div> with:
+          <div class="avatar">
+            <img src="shreyas.jpg" alt="Shreyas Kawale"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+          </div>
+          ─────────────────────────────────────────── -->
         <div class="avatar">👤</div>
         <div class="t-name">Shreyas Kawale</div>
         <div class="t-role">Director</div>
         <p class="t-desc">Oversees operations and development initiatives, ensuring Ycsage Tech's products meet the
           highest standards of quality, delivery, and user experience.</p>
       </div>
-
-      <!-- DIRECTOR 2 -->
       <div class="team-card">
         <!--
-        ── PHOTO: CHANDAN SAH ───────────────────
-        Replace <div class="avatar">👤</div> with:
-        <div class="avatar">
-          <img src="chandan.jpg" alt="Chandan Sah"
-               style="width:100%;height:100%;
-                      object-fit:cover;border-radius:50%;" />
-        </div>
-        ─────────────────────────────────────── -->
+          ── PHOTO: CHANDAN SAH ──────────────────────
+          Replace <div class="avatar">👤</div> with:
+          <div class="avatar">
+            <img src="chandan.jpg" alt="Chandan Sah"
+                 style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+          </div>
+          ─────────────────────────────────────────── -->
         <div class="avatar">👤</div>
         <div class="t-name">Chandan Sah</div>
         <div class="t-role">Director</div>
         <p class="t-desc">Leads key business and technical directions, contributing to the strategic strength and
           operational excellence that defines Ycsage Tech.</p>
       </div>
-
     </div>
   </section>
 
@@ -1386,17 +1439,52 @@
       <p class="sec-desc">Have a project in mind, a collaboration idea, or just want to say hello? We'd love to hear
         from you.</p>
       <a href="mailto:ycsagetech4725@gmail.com" class="email-link">📧 ycsagetech4725@gmail.com</a>
-      <form class="cform" onsubmit="doSend(event)">
+
+      <!-- ═══════════════════════════════════════════════════════════════
+           ⚠️  ONE-TIME EMAILJS SETUP (5 minutes, completely free)
+           ───────────────────────────────────────────────────────────────
+           1. Go to https://www.emailjs.com  →  Sign Up (free)
+           2. Add Email Service → Choose Gmail → connect ycsagetech4725@gmail.com
+              → Copy the "Service ID"  (looks like: service_xxxxxxx)
+           3. Create Email Template → Use these template variables:
+                Subject:  New message from {{from_name}} — {{subject}}
+                Body:     Name: {{from_name}}
+                          Email: {{from_email}}
+                          Subject: {{subject}}
+                          Message: {{message}}
+              → Set "To Email" as:  ycsagetech4725@gmail.com
+              → Copy the "Template ID"  (looks like: template_xxxxxxx)
+           4. Go to Account → Copy your "Public Key"  (looks like: xxxxxxxxxxx)
+           5. Paste all three below replacing the placeholder text:
+           ═══════════════════════════════════════════════════════════════ -->
+
+      <div class="setup-notice" id="setupNotice">
+        <strong>⚙️ One-time Email Setup Required (5 mins)</strong>
+        To activate real email sending, open this file in a code editor and fill in your EmailJS keys in the
+        <code>&lt;script&gt;</code> section at the bottom. See the comment above for exact steps.
+        Once keys are added, delete this notice box entirely.
+      </div>
+
+      <form class="cform" id="contactForm" onsubmit="doSend(event)" novalidate>
         <div class="f-row">
-          <div class="ff"><label for="fn">Name</label><input type="text" id="fn" placeholder="Your name" required />
+          <div class="ff">
+            <label for="fn">Name</label>
+            <input type="text" id="fn" name="from_name" placeholder="Your full name" required />
           </div>
-          <div class="ff"><label for="fe">Email</label><input type="email" id="fe" placeholder="you@email.com"
-              required /></div>
+          <div class="ff">
+            <label for="fe">Email</label>
+            <input type="email" id="fe" name="from_email" placeholder="you@email.com" required />
+          </div>
         </div>
-        <div class="ff"><label for="fs">Subject</label><input type="text" id="fs" placeholder="What's this about?" />
+        <div class="ff">
+          <label for="fs">Subject</label>
+          <input type="text" id="fs" name="subject" placeholder="What's this about?" />
         </div>
-        <div class="ff"><label for="fm">Message</label><textarea id="fm" rows="5"
-            placeholder="Tell us about your project or question..." required></textarea></div>
+        <div class="ff">
+          <label for="fm">Message</label>
+          <textarea id="fm" name="message" rows="5" placeholder="Tell us about your project or question..."
+            required></textarea>
+        </div>
         <button type="submit" class="sbtn" id="sb">Send Message →</button>
       </form>
     </div>
@@ -1416,29 +1504,126 @@
     <div class="f-copy">© 2025 Ycsage Tech. All rights reserved.</div>
   </footer>
 
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon"></span>
+    <span id="toastMsg"></span>
+  </div>
+
   <script>
-    // Scroll reveal
+    // ═══════════════════════════════════════════════════════════════════
+    //  ✏️  PASTE YOUR EMAILJS KEYS HERE
+    //  Follow the 5-step setup in the comment above the form
+    // ═══════════════════════════════════════════════════════════════════
+    const EMAILJS_PUBLIC_KEY = '7XdZ2elJ-gFOSK3My';        // e.g. 'abc123XYZ'
+    const EMAILJS_SERVICE_ID = 'service_4pav09g';        // e.g. 'service_abc123'
+    const EMAILJS_TEMPLATE_ID = 'ozbzpuc';       // e.g. 'template_abc123'
+    // ═══════════════════════════════════════════════════════════════════
+
+    // Hide setup notice once keys are filled in
+    const keysConfigured = !EMAILJS_PUBLIC_KEY.includes('YOUR_') &&
+      !EMAILJS_SERVICE_ID.includes('YOUR_') &&
+      !EMAILJS_TEMPLATE_ID.includes('YOUR_');
+
+    if (keysConfigured) {
+      emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+      const notice = document.getElementById('setupNotice');
+      if (notice) notice.remove();
+    }
+
+    // ── SEND FORM ───────────────────────────────────────────────────────
+    async function doSend(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('sb');
+
+      // Validate
+      const name = form.from_name.value.trim();
+      const email = form.from_email.value.trim();
+      const message = form.message.value.trim();
+      if (!name || !email || !message) {
+        showToast('error', '⚠️ Please fill in all required fields.');
+        return;
+      }
+
+      // If keys not configured yet — show demo success
+      if (!keysConfigured) {
+        setBtn('loading');
+        await delay(1200);
+        setBtn('success');
+        showToast('success', '✅ Demo mode — configure EmailJS keys to send real emails.');
+        setTimeout(() => { setBtn('idle'); form.reset(); }, 3500);
+        return;
+      }
+
+      // Real send via EmailJS
+      setBtn('loading');
+      try {
+        await emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form);
+        setBtn('success');
+        showToast('success', '✅ Message sent! We\'ll get back to you soon.');
+        setTimeout(() => { setBtn('idle'); form.reset(); }, 4000);
+      } catch (err) {
+        console.error('EmailJS error:', err);
+        setBtn('error');
+        showToast('error', '❌ Failed to send. Please email us directly.');
+        setTimeout(() => setBtn('idle'), 4000);
+      }
+    }
+
+    // ── BUTTON STATE MACHINE ────────────────────────────────────────────
+    function setBtn(state) {
+      const btn = document.getElementById('sb');
+      btn.className = 'sbtn';
+      btn.disabled = false;
+      btn.innerHTML = '';
+
+      const states = {
+        idle: { cls: '', html: 'Send Message →', disabled: false },
+        loading: { cls: 'loading', html: '<div class="spinner"></div> Sending…', disabled: true },
+        success: { cls: 'success', html: '✓ Message Sent!', disabled: true },
+        error: { cls: 'error', html: '✕ Failed — Try Again', disabled: false }
+      };
+
+      const s = states[state] || states.idle;
+      if (s.cls) btn.classList.add(s.cls);
+      btn.innerHTML = s.html;
+      btn.disabled = s.disabled;
+    }
+
+    // ── TOAST ────────────────────────────────────────────────────────────
+    let toastTimer;
+    function showToast(type, message) {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toastMsg');
+      clearTimeout(toastTimer);
+
+      toast.className = `toast toast-${type}`;
+      msg.textContent = message;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => toast.classList.add('show'));
+      });
+
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 5000);
+    }
+
+    // ── HELPERS ──────────────────────────────────────────────────────────
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // ── SCROLL REVEAL ────────────────────────────────────────────────────
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
     }, { threshold: 0.08 });
     document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // Mobile nav
+    // ── MOBILE NAV ───────────────────────────────────────────────────────
     function toggleNav() {
       const ul = document.querySelector('.nav-links');
       const cta = document.querySelector('.nav-cta');
       const open = ul.style.display === 'flex';
       ul.style.cssText = open ? '' : 'display:flex;position:fixed;top:62px;left:0;right:0;flex-direction:column;background:#0c1624;padding:2rem;gap:1.5rem;border-bottom:1px solid rgba(255,255,255,0.07);z-index:199;';
       cta.style.cssText = open ? '' : 'display:none;';
-    }
-
-    // Form
-    function doSend(e) {
-      e.preventDefault();
-      const btn = document.getElementById('sb');
-      btn.textContent = '✓ Message Sent!';
-      btn.style.background = '#28c840';
-      setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = ''; e.target.reset(); }, 3500);
     }
   </script>
 </body>
